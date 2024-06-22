@@ -22,10 +22,10 @@ wss.on('connection', ws => {
     ws.send(data)
 
     /// 發送給所有client： 
-    let clients = wss.clients  //取得所有連接中的 client
-    clients.forEach(client => {
-      client.send(data)  // 發送至每個 client
-    })
+    // let clients = wss.clients  //取得所有連接中的 client
+    // clients.forEach(client => {
+    //   client.send(data)  // 發送至每個 client
+    // })
   })
   // 當連線關閉
   ws.on('close', () => {
