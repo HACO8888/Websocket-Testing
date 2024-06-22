@@ -1,0 +1,43 @@
+<script>
+  document.addEventListener("DOMContentLoaded", event => {
+    let keyinDom = document.querySelector('#txtInput')
+    let showDom = document.querySelector('#txtShow')
+
+    let url = 'ws://localhost:3000'
+    let ws;
+
+    function connectWebSocket() {
+      ws = new WebSocket(url);
+
+      ws.onopen = () => {
+        console.log('open connection');
+      }
+
+      ws.onclose = () => {
+        console.log('close connection');
+        // 重新連線
+        setTimeout(() => {
+          connectWebSocket();
+        }, 3000); // 3秒後重新連線
+      }
+
+      ws.onmessage = event => {
+        let txt = event.data;
+        if (!showDom.value) showDom.value = txt;
+        else showDom.value = showDom.value + "\n" + txt;
+        keyinDom.value = "";
+      }
+    }
+
+    connectWebSocket();
+
+    document.querySelector("#btnSend").addEventListener('click', () => {
+      let txt = keyinDom.value;
+      ws.send(txt);
+    });
+  });
+</script>
+
+<textarea id="txtShow" disabled></textarea>
+<input id="txtInput" type="text">
+<button id="btnSend">送出</button>
